@@ -137,7 +137,16 @@ while(1<=opcion<=3):
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_Asistentes()
-
+    
+    elif opcion==4:
+        print('-'*69+"TABLA DE CITAS"+'-'*69)
+        print(F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento   |   cita_fecha   |     estado     |    costo   |")
+        cur.execute("select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
+        for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
+            print("|%8d | %12d | %12d | %11d | %12d | %15d | %15s | %14s | %7.2f |" % (id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_Citas()
 
 """""
         mostrarOpciones()
