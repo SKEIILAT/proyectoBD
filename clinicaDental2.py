@@ -174,6 +174,9 @@ while(1<=opcion<=7):
             mostrarTablaPacientes()
             mostrarOpciones_Pacientes()
             opcionP=int(input("\nIngrese una opcion: "))
+            
+        elif opcionP==5:
+            opcionP=0
 
         mostrarMenu()
         opcion=int(input("\nIngrese una opcion: ")) 
