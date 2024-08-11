@@ -114,7 +114,7 @@ def mostrarTablaCitas(consulta="select id_cita,id_paciente,id_historia,id_dentis
 mostrarMenu()
 opcion=int(input("\nIngrese una opcion: "))
 print()
-while(1<=opcion<=6):
+while(1<=opcion<=7):
     if opcion==1:
        mostrarTablaPacientes()
        print()
@@ -197,7 +197,7 @@ while(1<=opcion<=6):
         mostrarOpciones_Asistentes()
         opcionA = int(input("\nIngrese una opcion: "))
         print()
-        while (1 <= opcionA <= 7):
+        while (1 <= opcionA <= 4):
             if opcionA == 1:
                 id_dentista = int(input("Ingrese el ID del dentista que tiene el asistente: "))
                 nombre = input("Ingrese el nombre")
