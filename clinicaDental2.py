@@ -342,7 +342,8 @@ while(1<=opcion<=7):
                 id_tratamiento = int(input("Ingrese el ID del dentista que tiene el asistente: "))
                 cita_fecha = input("Ingrese la cita y fecha de la cita (año-mes-dia hora:minuto_segundo):")
                 estado = input("Ingrese el estado de la cita (Pendiente,Cancelado,En curso,Finalizado): ")
-                consulta = f"INSERT INTO Cita (id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita-fecha,estado) VALUES ({id_paciente}, {id_historia}, {id_dentista}, {id_asistente}, {id_tratamiento}, %s, %s);"
+                costo=float(input("Ingrese el costo de la cita"))
+                consulta = f"INSERT INTO Cita (id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo) VALUES ({id_paciente}, {id_historia}, {id_dentista}, {id_asistente}, {id_tratamiento}, %s, %s, {costo});"
                 cur.execute(consulta, (cita_fecha,estado))
                 miConexion.commit()
                 mostrarTablaCitas()
@@ -374,7 +375,8 @@ while(1<=opcion<=7):
                 id_tratamiento = int(input("Ingrese el ID del dentista que tiene el asistente: "))
                 cita_fecha = input("Ingrese la cita y fecha de la cita (año-mes-dia hora:minuto_segundo):")
                 estado = input("Ingrese el estado de la cita (Pendiente,Cancelado,En curso,Finalizado): ")
-                consulta = F"UPDATE Cita SET id_paciente = {id_paciente},id_historia = {id_historia},id_dentista = {id_dentista},id_asistente ={id_asistente},id_tratamiento = {id_tratamiento},cita_fecha = %s,estado = %s WHERE id_cita = {id};"
+                costo = float(input("Ingrese el costo de la cita"))
+                consulta = F"UPDATE Cita SET id_paciente = {id_paciente},id_historia = {id_historia},id_dentista = {id_dentista},id_asistente ={id_asistente},id_tratamiento = {id_tratamiento},cita_fecha = %s,estado = %s,costo = {costo} WHERE id_cita = {id};"
                 cur.execute(consulta, (cita_fecha,estado))
                 miConexion.commit()
                 mostrarTablaCitas()
