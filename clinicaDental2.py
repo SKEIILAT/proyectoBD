@@ -1,7 +1,26 @@
 import pymysql
 
-miConexion= pymysql.connect(host="localhost",user="root",passwd="",db="ClinicaDentalDB")
-cur=miConexion.cursor()
+try:
+    
+    miConexion = pymysql.connect(
+        host="localhost",
+        user="root",
+        passwd="admin",
+        db="ClinicaDentalDB"
+    )
+    print("Conexión exitosa")
+    cur=miConexion.cursor()
+    cur.execute("SHOW DATABASES;")
+    for db in cur:
+        print(db)
+
+except pymysql.MySQLError as e:
+    print(f"Error de conexión: {e}")
+
+finally:
+    if 'miConexion' in locals():
+        miConexion.close()
+
 
 def mostrarMenu():
     print("Bienvenid@")
