@@ -90,10 +90,31 @@ def mostrarTablaTratamiento():
     for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
             print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))   
 
+def mostrarTablaAsistentes(consulta="select id_asistente, id_dentista, nombre, apellido, email, telefono from asistente "):
+    cur.execute(consulta)
+    print('-' * 69 + "TABLA DE ASISTENTES" + '-' * 69)
+    print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |     telefono   |")
+    cur.execute("select id_asistente, id_dentista, nombre, apellido, telefono from asistente ")
+    for id_asistente, id_dentista, nombre, apellido, telefono in cur.fetchall():
+        print("|%18d | %17d | %13s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
+
+
+def mostrarTablaCitas(consulta="select id_cita,id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo from cita"):
+    cur.execute(consulta)
+    print('-' * 69 + "TABLA DE CITAS" + '-' * 69)
+    print(
+        F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento    |      cita_fecha     |     estado     |    costo   |")
+    cur.execute(
+        "select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
+    for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
+        print("|%11d | %15d | %15d | %15d | %16d | %19d | %15s | %14s | %10.2f |" % (
+        id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
+
+
 mostrarMenu()
 opcion=int(input("\nIngrese una opcion: "))
 print()
-while(1<=opcion<=3):
+while(1<=opcion<=6):
     if opcion==1:
        mostrarTablaPacientes()
        print()
@@ -171,24 +192,121 @@ while(1<=opcion<=3):
 
 
     elif opcion==3:
-        print('-'*69+"TABLA DE ASISTENTES"+'-'*69)
-        print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |     telefono   |")
-        cur.execute("select id_asistente, id_dentista, nombre, apellido, telefono from asistente ")
-        for id_asistente, id_dentista, nombre, apellido, telefono in cur.fetchall():
-            print("|%18d | %17d | %13s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
-        opcion=int(input("\nIngrese una opcion: "))
+        mostrarTablaAsistentes()
         print()
         mostrarOpciones_Asistentes()
+        opcionA = int(input("\nIngrese una opcion: "))
+        print()
+        while (1 <= opcionA <= 7):
+            if opcionA == 1:
+                id_dentista = int(input("Ingrese el ID del dentista que tiene el asistente: "))
+                nombre = input("Ingrese el nombre")
+                apellido = input("Ingrese el apellido: ")
+                email = input("Ingrese el teléfono: ")
+                telefono = input("Ingrese el email: ")
+                consulta = f"INSERT INTO Asistente (id_dentista,nombre, apellido, email, telefono) VALUES ({id_dentista}, %s, %s, %s, %s);"
+                cur.execute(consulta, (nombre, apellido, email, telefono))
+                miConexion.commit()
+                mostrarTablaAsistentes()
+                mostrarOpciones_Asistentes()
+
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 2:
+                id = int(input("Ingrese el id del asistente a consultar: "))
+                consulta = F"SELECT id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion FROM Asistente WHERE id_asistente = {id};"
+                mostrarTablaAsistentes(consulta)
+
+                mostrarOpciones_Asistentes()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 3:
+                id = int(input("Ingrese el id del asistente: "))
+                id_dent=int(input("Ingrese el id del dentista que tiene le asistente:"))
+                nombre = input("Ingrese el nombre: ")
+                apellido = input("Ingrese el apellido: ")
+                email = input("Ingrese el teléfono: ")
+                telefono = input("Ingrese el email: ")
+                consulta = F"UPDATE Asistente SET id_dentista = {id_dent},nombre = %s, apellido = %s, email = %s, telefono = %s WHERE id_asistente = {id};"
+                cur.execute(consulta, (nombre, apellido, email, telefono))
+                miConexion.commit()
+                mostrarTablaAsistentes()
+                mostrarOpciones_Asistentes()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 4:
+                id = int(input("Ingrese el id del asistente a eliminar: "))
+                consulta = F"DELETE FROM Asistente WHERE id_asistente = {id};"
+                cur.execute(consulta)
+                miConexion.commit()
+                mostrarTablaAsistentes()
+                mostrarOpciones_Asistentes()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            mostrarMenu()
+            opcion = int(input("\nIngrese una opcion: "))
+
     
     elif opcion==4:
-        print('-'*69+"TABLA DE CITAS"+'-'*69)
-        print(F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento    |      cita_fecha     |     estado     |    costo   |")
-        cur.execute("select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
-        for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
-            print("|%11d | %15d | %15d | %15d | %16d | %19d | %15s | %14s | %10.2f |" % (id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
-        opcion=int(input("\nIngrese una opcion: "))
+        mostrarTablaCitas()
         print()
         mostrarOpciones_Citas()
+        opcionA = int(input("\nIngrese una opcion: "))
+        print()
+        while (1 <= opcionA <= 4):
+            if opcionA == 1:
+
+                id_paciente = int(input("Ingrese el ID del paciente que tiene la cita: "))
+                id_historia = int(input("Ingrese el ID de la h_clínica que tiene la cita: "))
+                id_dentista = int(input("Ingrese el ID del dentista que tiene la cita: "))
+                id_asistente = int(input("Ingrese el ID del dentista que tiene el asistente: "))
+                id_tratamiento = int(input("Ingrese el ID del dentista que tiene el asistente: "))
+                cita_fecha = input("Ingrese la cita y fecha de la cita (año-mes-dia hora:minuto_segundo):")
+                estado = input("Ingrese el estado de la cita (Pendiente,Cancelado,En curso,Finalizado): ")
+                consulta = f"INSERT INTO Cita (id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita-fecha,estado) VALUES ({id_paciente}, {id_historia}, {id_dentista}, {id_asistente}, {id_tratamiento}, %s, %s);"
+                cur.execute(consulta, (cita_fecha,estado))
+                miConexion.commit()
+                mostrarTablaCitas()
+                mostrarOpciones_Citas()
+
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 2:
+                id = int(input("Ingrese el id de la cita a consultar: "))
+                consulta = F"SELECT id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado FROM Cita WHERE id_cita = {id};"
+                mostrarTablaCitas(consulta)
+
+                mostrarOpciones_Citas()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 3:
+                id = int(input("Ingrese el id de la cita: "))
+                id_paciente = int(input("Ingrese el ID del paciente que tiene la cita: "))
+                id_historia = int(input("Ingrese el ID de la h_clínica que tiene la cita: "))
+                id_dentista = int(input("Ingrese el ID del dentista que tiene la cita: "))
+                id_asistente = int(input("Ingrese el ID del dentista que tiene el asistente: "))
+                id_tratamiento = int(input("Ingrese el ID del dentista que tiene el asistente: "))
+                cita_fecha = input("Ingrese la cita y fecha de la cita (año-mes-dia hora:minuto_segundo):")
+                estado = input("Ingrese el estado de la cita (Pendiente,Cancelado,En curso,Finalizado): ")
+                consulta = F"UPDATE Cita SET id_paciente = {id_paciente},id_historia = {id_historia},id_dentista = {id_dentista},id_asistente ={id_asistente},id_tratamiento = {id_tratamiento},cita_fecha = %s,estado = %s WHERE id_cita = {id};"
+                cur.execute(consulta, (cita_fecha,estado))
+                miConexion.commit()
+                mostrarTablaCitas()
+                mostrarOpciones_Citas()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA == 4:
+                id = int(input("Ingrese el id de la cita a eliminar: "))
+                consulta = F"DELETE FROM Cita WHERE id_cita = {id};"
+                cur.execute(consulta)
+                miConexion.commit()
+                mostrarTablaCitas()
+                mostrarOpciones_Citas()
+                opcionA = int(input("\nIngrese una opcion: "))
+
+            mostrarMenu()
+            opcion = int(input("\nIngrese una opcion: "))
+
 
 
     elif opcion==5:
