@@ -95,10 +95,7 @@ while(1<=opcion<=3):
             id=int(input("Ingrese el id del paciente a consultar: "))
             consulta=F"SELECT id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion FROM Paciente WHERE id_paciente = {id};"
             cur.execute(consulta)
-            """
-            fila=cur.fetchone()
-            print(fila)
-            """
+
             print('-'*65+"TABLA DE PACIENTES"+'-'*65)
             print(F"|    id_paciente   |     nombre    |     apellido     |     telefono   |           email          |   fecha_nacimiento  |         direccion        |")
             for id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion in cur.fetchall():
@@ -149,40 +146,42 @@ while(1<=opcion<=3):
 
     elif opcion==3:
         print('-'*69+"TABLA DE ASISTENTES"+'-'*69)
-        print(F"|    id_asistente   |    id_dentista   |     nombre     |    apellido      |     telefono   |")
-        cur.execute("select id_asistente, id_identista, nombre, apellido, telefono from asistente ")
+        print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |     telefono   |")
+        cur.execute("select id_asistente, id_dentista, nombre, apellido, telefono from asistente ")
         for id_asistente, id_dentista, nombre, apellido, telefono in cur.fetchall():
-            print("|%17d | %17d | %12s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
+            print("|%18d | %17d | %13s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_Asistentes()
     
     elif opcion==4:
         print('-'*69+"TABLA DE CITAS"+'-'*69)
-        print(F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento   |   cita_fecha   |     estado     |    costo   |")
+        print(F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento    |      cita_fecha     |     estado     |    costo   |")
         cur.execute("select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
         for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
-            print("|%8d | %12d | %12d | %11d | %12d | %15d | %15s | %14s | %7.2f |" % (id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
+            print("|%11d | %15d | %15d | %15d | %16d | %19d | %15s | %14s | %10.2f |" % (id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_Citas()
 
+
     elif opcion==5:
         print('-'*69+"TABLA DE TRATAMIENTO"+'-'*69)
-        print(F"|  id_tratamiento  |     nombre     |     descripcion    |    duracion_dias   |")
+        print(F"|  id_tratamiento  |           nombre           |                                 descripcion                             |    duracion_dias   |")
         cur.execute("select id_tratamiento, nombre, descripcion, duracion_dias FROM tratamiento")
         for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
-            print("|%16d | %12s  | %15s  | %14d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
+            print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_Tratamientos()
 
+
     elif opcion==6:
         print('-'*69 + "TABLA DE HISTORIAS CLÍNICAS" + '-'*69)
-        print(F"| id_historia | id_paciente |   observaciones   |")
+        print(F"| id_historia | id_paciente |                                                                             observaciones                                                              |")
         cur.execute("SELECT id_historia, id_paciente, observaciones FROM historia_clinica")
         for id_historia, id_paciente, observaciones in cur.fetchall():
-            print("|%13d | %12d | %17s |" % (id_historia, id_paciente, observaciones))
+            print("|%12d | %11d | %150s |" % (id_historia, id_paciente, observaciones))
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_HC()
