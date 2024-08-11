@@ -98,17 +98,17 @@ def mostrarTablaTratamiento():
     for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
             print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))   
 
-def mostrarTablaAsistentes(consulta="select id_asistente, id_dentista, nombre, apellido, email, telefono from asistente "):
-    cur.execute(consulta)
+def mostrarTablaAsistentes():
+    cur.execute("select id_asistente, id_dentista, nombre, apellido, email, telefono from asistente ")
     print('-' * 69 + "TABLA DE ASISTENTES" + '-' * 69)
-    print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |     telefono   |")
-    cur.execute("select id_asistente, id_dentista, nombre, apellido, telefono from asistente ")
-    for id_asistente, id_dentista, nombre, apellido, telefono in cur.fetchall():
-        print("|%18d | %17d | %13s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
+    print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |     email   |    telefono    |")
+    for id_asistente, id_dentista, nombre, apellido, email, telefono in cur.fetchall():
+        print("|%18d | %17d | %13s  | %15s  | %14s | %15s |" % (id_asistente, id_dentista, nombre, apellido, email, telefono))
 
 
-def mostrarTablaCitas(consulta="select id_cita,id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo from cita"):
-    cur.execute(consulta)
+def mostrarTablaCitas():
+    cur.execute(
+        "select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
     print('-' * 69 + "TABLA DE CITAS" + '-' * 69)
     print(
         F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento    |      cita_fecha     |     estado     |    costo   |")
@@ -289,11 +289,12 @@ while(1<=opcion<=7):
 
             elif opcionA == 2:
                 id = int(input("Ingrese el id del asistente a consultar: "))
-                consulta = F"SELECT id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion FROM Asistente WHERE id_asistente = {id};"
-                mostrarTablaAsistentes(consulta)
-
-                mostrarOpciones_Asistentes()
-                opcionA = int(input("\nIngrese una opcion: "))
+                consulta = F"SELECT id_dentista, nombre, apellido, email, telefono FROM Asistente WHERE id_asistente = {id};"
+                cur.execute(consulta)
+                print('-' * 69 + "TABLA DE ASISTENTES" + '-' * 69)
+                print(F"|    id_asistente   |    id_dentista    |     nombre     |    apellido      |    email   |    telefono   |")
+                for id_asistente, id_dentista, nombre, apellido, email, telefono in cur.fetchall():
+                    print("|%18d | %17d | %13s  | %15s  | %14s | %15s |" % (id_asistente, id_dentista, nombre, apellido, email,telefono))
 
             elif opcionA == 3:
                 id = int(input("Ingrese el id del asistente: "))
@@ -351,8 +352,15 @@ while(1<=opcion<=7):
 
             elif opcionA == 2:
                 id = int(input("Ingrese el id de la cita a consultar: "))
-                consulta = F"SELECT id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado FROM Cita WHERE id_cita = {id};"
-                mostrarTablaCitas(consulta)
+                consulta = F"SELECT id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo FROM Cita WHERE id_cita = {id};"
+                cur.execute(consulta)
+                print('-' * 69 + "TABLA DE CITAS" + '-' * 69)
+                print(
+                    F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento    |      cita_fecha     |     estado     |    costo   |")
+                for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
+                    print("|%11d | %15d | %15d | %15d | %16d | %19d | %15s | %14s | %10.2f |" % (
+                        id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado,
+                    costo))
 
                 mostrarOpciones_Citas()
                 opcionA = int(input("\nIngrese una opcion: "))
