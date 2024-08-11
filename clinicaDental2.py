@@ -83,6 +83,13 @@ def mostrarTablaPacientes():
      for id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion in cur.fetchall():
             print("|%17d | %12s  | %15s  | %14s | %24s | %19s | %24s |" % (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion))
 
+def mostrarTablaTratamiento():
+    print('-'*69+"TABLA DE TRATAMIENTO"+'-'*69)
+    print(F"|  id_tratamiento  |           nombre           |                                 descripcion                             |    duracion_dias   |")
+    cur.execute("select id_tratamiento, nombre, descripcion, duracion_dias FROM tratamiento")
+    for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
+            print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))   
+
 mostrarMenu()
 opcion=int(input("\nIngrese una opcion: "))
 print()
@@ -185,14 +192,68 @@ while(1<=opcion<=3):
 
 
     elif opcion==5:
-        print('-'*69+"TABLA DE TRATAMIENTO"+'-'*69)
-        print(F"|  id_tratamiento  |           nombre           |                                 descripcion                             |    duracion_dias   |")
-        cur.execute("select id_tratamiento, nombre, descripcion, duracion_dias FROM tratamiento")
-        for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
-            print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
-        opcion=int(input("\nIngrese una opcion: "))
+        mostrarTablaTratamiento()
         print()
         mostrarOpciones_Tratamientos()
+        opcionT=int(input("\nIngrese una opcion: "))
+        print()
+        
+        while(1<=opcionT<=5):
+            if opcionT==1:
+
+                id_paciente=int(input("Ingrese el id del paciente asociado a el tratamiento: "))
+                nombre=input("Ingrese el nombre: ")
+                descripcion=input("Ingrese una descripción: ")
+                duracion=int(input("Ingrese la duración en dias del tratamiento: "))
+                #cur.execute(F"INSERT INTO Paciente (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion) VALUES ({id},{nombre}, {apellido}, {telefono}, {email}, {fecha_nac}, {direccion})")
+                consulta = F"INSERT INTO Tratamiento (id_paciente, nombre, descripcion, duracion_dias) VALUES ({id_paciente}, %s, %s, {duracion});"
+                cur.execute(consulta, (nombre, descripcion))
+                miConexion.commit()
+                mostrarTablaTratamiento()
+                mostrarOpciones_Tratamientos()
+
+                opcionT=int(input("\nIngrese una opcion: "))
+            
+            elif opcionT==2:
+                id=int(input("Ingrese el id del tratamiento a consultar: "))
+                consulta=F"SELECT id_tratamiento, nombre, descripcion, duracion_dias FROM Tratamiento WHERE id_tratamiento = {id};"
+                cur.execute(consulta)
+                
+                print('-'*65+"TABLA DE TRATAMIENTOS"+'-'*65)
+                print(F"|  id_tratamiento  |           nombre           |                                 descripcion                             |    duracion_dias   |")
+                for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
+                    print("|%17d | %25s  | %70s  | %18d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
+                
+                mostrarOpciones_Tratamientos()
+                opcionT=int(input("\nIngrese una opcion: "))
+                
+            elif opcionT==3:
+                id_tratamiento=int(input("Ingrese el id del tratamiento: "))
+                id_paciente=int(input("Ingrese el id del paciente asociado a el tratamiento: "))
+                nombre=input("Ingrese el nombre: ")
+                descripcion=input("Ingrese una descripción: ")
+                duracion=int(input("Ingrese la duración en dias del tratamiento: "))
+                consulta=F"UPDATE Tratamiento SET nombre = %s, descripcion = %s, duracion_dias = {duracion} WHERE id_tratamiento = {id_tratamiento};"
+                cur.execute(consulta,(nombre,descripcion))
+                miConexion.commit()
+                mostrarTablaTratamiento()
+                mostrarOpciones_Tratamientos()
+                opcionT=int(input("\nIngrese una opcion: "))
+            
+            elif opcionT==4:
+                id_tratamiento=int(input("Ingrese el id del tratamiento a eliminar: "))
+                consulta=F"DELETE FROM Tratamiento WHERE id_tratamiento = {id_tratamiento};"
+                cur.execute(consulta)
+                miConexion.commit()
+                mostrarTablaTratamiento()
+                mostrarOpciones_Tratamientos()
+                opcionT=int(input("\nIngrese una opcion: "))
+            
+            elif opcionT==5:
+                opcionT=0
+
+            mostrarMenu()
+            opcion=int(input("\nIngrese una opcion: "))
 
 
     elif opcion==6:
