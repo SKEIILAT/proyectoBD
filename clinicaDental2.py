@@ -7,9 +7,11 @@ def mostrarMenu():
     print("Bienvenid@")
     print("Menú de opciones")
     print("1. PACIENTES")
-    print("2. MOSTRAR DENTISTAS")
-    print("3. CONSULTAS")
-    print("4. SALIR")
+    print("2. DENTISTAS")
+    print("3. ASISTENTE")
+    print("4. CITA")
+    print("5. TRATAMIENTO")
+    print("6. HISTORIA CLÍNICA")
 
 def mostrarOpciones():
     print("Menú de opciones")
