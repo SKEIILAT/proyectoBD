@@ -89,9 +89,9 @@ while(1<=opcion<=3):
             email=input("Ingrese el email: ")
             fecha_nac=input("Ingrese la fecha de nacimiento (año-mes-dia) : ")
             direccion=input("Ingrese la dirección: ")
-            #cur.execute(F"INSERT INTO Paciente (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion) VALUES ({id},{nombre}, {apellido}, {telefono}, {email}, {fecha_nac}, {direccion})")
-            consulta="INSERT INTO Paciente (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion) VALUES (?,?,?,?,?,?,?);"
-            cur.execute(consulta,id,nombre,apellido,telefono,email,fecha_nac,direccion)
+            consulta = "INSERT INTO Paciente (nombre, apellido, telefono, email, fecha_nacimiento, direccion) VALUES (%s, %s, %s, %s, %s, %s);"
+            cur.execute(consulta, (nombre, apellido, telefono, email, fecha_nac, direccion))
+            miConexion.commit()
             mostrarTablaPacientes()
 
             opcionP=int(input("\nIngrese una opcion: "))
