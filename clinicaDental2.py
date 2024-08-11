@@ -62,7 +62,7 @@ def mostrarTablaPacientes():
      print(F"|    id_paciente   |     nombre    |     apellido     |     telefono   |           email          |   fecha_nacimiento  |         direccion        |")
      for id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion in cur.fetchall():
             print("|%17d | %12s  | %15s  | %14s | %24s | %19s | %24s |" % (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion))
-        
+
 mostrarMenu()
 opcion=int(input("\nIngrese una opcion: "))
 print()
@@ -126,7 +126,20 @@ while(1<=opcion<=3):
             print("|%17d | %12s  | %15s  | %14s | %24s | %21s | %14s |%14s |" % (id_dentista, nombre, apellido, telefono, email, especialidad, disponibilidad_inicio, disponibilidad_fin))
         opcion=int(input("\nIngrese una opcion: "))
         print()
+        mostrarOpciones_Dentistas()
+
     elif opcion==3:
+        print('-'*69+"TABLA DE ASISTENTES"+'-'*69)
+        print(F"|    id_asistente   |    id_dentista   |     nombre     |    apellido      |     telefono   |")
+        cur.execute("select id_asistente, id_identista, nombre, apellido, telefono from asistente ")
+        for id_asistente, id_dentista, nombre, apellido, telefono in cur.fetchall():
+            print("|%17d | %17d | %12s  | %15s  | %14s |" % (id_asistente, id_dentista, nombre, apellido, telefono))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_Asistentes()
+
+
+"""""
         mostrarOpciones()
         opcion2=int(input("\nIngrese una opcion: "))
         while(1<=opcion2<=7):
@@ -179,6 +192,7 @@ while(1<=opcion<=3):
             
         mostrarMenu()
         opcion=int(input("\nIngrese una opcion: "))    
+    """
     elif opcion==4:
         opcion=0
         miConexion.close()
