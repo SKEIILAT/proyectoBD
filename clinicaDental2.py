@@ -148,6 +148,27 @@ while(1<=opcion<=3):
         print()
         mostrarOpciones_Citas()
 
+    elif opcion==5:
+        print('-'*69+"TABLA DE TRATAMIENTO"+'-'*69)
+        print(F"|  id_tratamiento  |     nombre     |     descripcion    |    duracion_dias   |")
+        cur.execute("select id_tratamiento, nombre, descripcion, duracion_dias FROM tratamiento")
+        for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
+            print("|%16d | %12s  | %15s  | %14d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_Tratamientos()
+
+    elif opcion==6:
+        print('-'*69 + "TABLA DE HISTORIAS CLÍNICAS" + '-'*69)
+        print(F"| id_historia | id_paciente |   observaciones   |")
+        cur.execute("SELECT id_historia, id_paciente, observaciones FROM historia_clinica")
+        for id_historia, id_paciente, observaciones in cur.fetchall():
+            print("|%13d | %12d | %17s |" % (id_historia, id_paciente, observaciones))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_HC()
+        
+
 """""
         mostrarOpciones()
         opcion2=int(input("\nIngrese una opcion: "))
