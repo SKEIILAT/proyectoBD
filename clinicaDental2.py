@@ -332,7 +332,7 @@ while(1<=opcion<=7):
         mostrarOpciones_Citas()
         opcionA = int(input("\nIngrese una opcion: "))
         print()
-        while (1 <= opcionA <= 4):
+        while (1 <= opcionA <= 5):
             if opcionA == 1:
 
                 id_paciente = int(input("Ingrese el ID del paciente que tiene la cita: "))
@@ -353,7 +353,7 @@ while(1<=opcion<=7):
 
             elif opcionA == 2:
                 id = int(input("Ingrese el id de la cita a consultar: "))
-                consulta = F"SELECT id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo FROM Cita WHERE id_cita = {id};"
+                consulta = F"SELECT id_cita,id_paciente,id_historia,id_dentista,id_asistente,id_tratamiento,cita_fecha,estado,costo FROM Cita WHERE id_cita = {id};"
                 cur.execute(consulta)
                 print('-' * 69 + "TABLA DE CITAS" + '-' * 69)
                 print(
