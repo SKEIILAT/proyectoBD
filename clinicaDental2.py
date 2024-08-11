@@ -13,15 +13,6 @@ def mostrarMenu():
     print("5. TRATAMIENTO")
     print("6. HISTORIA CLÍNICA")
 
-def mostrarOpciones():
-    print("Menú de opciones")
-    print("1. Pacientes con el mayor número de citas")
-    print("2. Dentistas con el mayor número de citas asignadas")
-    print("3. Asistentes que trabajan con más dentistas")
-    print("4. Tratamientos con el costo promedio más alto")
-    print("5. Detalles de citas por estado")
-    print("6. Número total de citas por paciente")
-    print("7. Regresar al menú principal")
 
 def mostrarOpciones_Pacientes():
     print("1. Añadir Paciente")
