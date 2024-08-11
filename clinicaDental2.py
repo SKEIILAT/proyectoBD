@@ -197,5 +197,3 @@ while(1<=opcion<=3):
         opcion=0
         miConexion.close()
 print("Saliendo....")
-
-
