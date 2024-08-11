@@ -12,6 +12,7 @@ def mostrarMenu():
     print("4. CITA")
     print("5. TRATAMIENTO")
     print("6. HISTORIA CLÍNICA")
+    print("7. Regresar al menú principal")
 
 
 def mostrarOpciones_Pacientes():
@@ -75,7 +76,7 @@ while(1<=opcion<=3):
        print()
        while(1<=opcionP<=4):
         if opcionP==1:
-            id=0
+        
             nombre=input("Ingrese el nombre: ")
             apellido=input("Ingrese el apellido: ")
             telefono=input("Ingrese el teléfono: ")
@@ -86,36 +87,53 @@ while(1<=opcion<=3):
             cur.execute(consulta, (nombre, apellido, telefono, email, fecha_nac, direccion))
             miConexion.commit()
             mostrarTablaPacientes()
+            mostrarOpciones_Pacientes()
 
             opcionP=int(input("\nIngrese una opcion: "))
-        """ 
-        elif opcion2==2:
+        
+        elif opcionP==2:
+            id=int(input("Ingrese el id del paciente a consultar: "))
+            consulta=F"SELECT id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion FROM Paciente WHERE id_paciente = {id};"
+            cur.execute(consulta)
+            """
+            fila=cur.fetchone()
+            print(fila)
+            """
+            print('-'*65+"TABLA DE PACIENTES"+'-'*65)
+            print(F"|    id_paciente   |     nombre    |     apellido     |     telefono   |           email          |   fecha_nacimiento  |         direccion        |")
+            for id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion in cur.fetchall():
+                print("|%17d | %12s  | %15s  | %14s | %24s | %19s | %24s |" % (id_paciente, nombre, apellido, telefono, email, fecha_nacimiento, direccion))
+            
+            mostrarOpciones_Pacientes()
+            opcionP=int(input("\nIngrese una opcion: "))
+               
+        elif opcionP==3:
+            id=int(input("Ingrese el id del paciente: "))
             nombre=input("Ingrese el nombre: ")
             apellido=input("Ingrese el apellido: ")
-            for paciente,lista in pacientes.items():
-            if (nombre in lista) and (apellido in lista) :
-                fecha_nac=input("Ingrese la fecha de nacimiento (dia/mes/año) : ")
-                pacientes[paciente][2]=fecha_nac
-                email=input("Ingrese el email: ")
-                pacientes[paciente][3]=email
-                telefono=input("Ingrese el teléfono: ")
-                pacientes[paciente][4]=telefono
-                direccion=input("Ingrese la dirección: ")
-                pacientes[paciente][5]=direccion
-                opcion2=int(input("\nIngrese una opcion: "))
-                
-        elif opcion2==3:
-            nombre=input("\nIngrese el nombre: ")
-            apellido=input("Ingrese el apellido: ")
-            for paciente,lista in pacientes.items():
-            if (nombre in lista) and (apellido in lista) :
-                print(F"Id_paciente: {paciente}")
-                print(lista)
-            opcion2=int(input("\nIngrese una opcion: "))
-        else:
-            break
-        opcion=int(input("\nIngrese una opcion: "))
-        """  
+            telefono=input("Ingrese el teléfono: ")
+            email=input("Ingrese el email: ")
+            fecha_nac=input("Ingrese la fecha de nacimiento (año-mes-dia) : ")
+            direccion=input("Ingrese la dirección: ")
+            consulta=F"UPDATE Paciente SET nombre = %s, apellido = %s, telefono = %s, email = %s, fecha_nacimiento = %s, direccion = %s WHERE id_paciente = {id};"
+            cur.execute(consulta,(nombre,apellido,telefono,email,fecha_nac,direccion))
+            miConexion.commit()
+            mostrarTablaPacientes()
+            mostrarOpciones_Pacientes()
+            opcionP=int(input("\nIngrese una opcion: "))
+        
+        elif opcionP==4:
+            id=int(input("Ingrese el id del paciente a eliminar: "))
+            consulta=F"DELETE FROM Paciente WHERE id_paciente = {id};"
+            cur.execute(consulta)
+            miConexion.commit()
+            mostrarTablaPacientes()
+            mostrarOpciones_Pacientes()
+            opcionP=int(input("\nIngrese una opcion: "))
+
+        mostrarMenu()
+        opcion=int(input("\nIngrese una opcion: ")) 
+        
 
 
     elif opcion==2:
@@ -128,6 +146,7 @@ while(1<=opcion<=3):
         print()
         mostrarOpciones_Dentistas()
 
+
     elif opcion==3:
         print('-'*69+"TABLA DE ASISTENTES"+'-'*69)
         print(F"|    id_asistente   |    id_dentista   |     nombre     |    apellido      |     telefono   |")
@@ -137,63 +156,38 @@ while(1<=opcion<=3):
         opcion=int(input("\nIngrese una opcion: "))
         print()
         mostrarOpciones_Asistentes()
-
-
-"""""
-        mostrarOpciones()
-        opcion2=int(input("\nIngrese una opcion: "))
-        while(1<=opcion2<=7):
-            if opcion2==1:
-                cur.execute("SELECT p.nombre, p.apellido, COUNT(c.id_cita) AS numero_de_citas FROM Paciente p JOIN Cita c ON p.id_paciente = c.id_paciente GROUP BY p.id_paciente ORDER BY numero_de_citas DESC")
-                print(F"|    Nombre   |       Apellido      |   Numero_de_citas  |")
-                for nombre, apellido, numero_de_citas in cur.fetchall():
-                    print("|%12s | %19s | %19d|" % (nombre, apellido, numero_de_citas))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==2:
-                cur.execute("SELECT d.nombre, d.apellido, COUNT(c.id_dentista) AS cantidad_citas FROM Dentista d JOIN Cita c ON d.id_dentista = c.id_dentista GROUP BY d.id_dentista ORDER BY cantidad_citas DESC;")
-                print(F"|    Nombre   |       Apellido      |   Cantidad_de_citas  |")
-                for nombre, apellido, cantidad_citas in cur.fetchall():
-                    print("|%12s | %19s | %21d|" % (nombre, apellido, cantidad_citas))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==3:
-                cur.execute("SELECT a.nombre, a.apellido, COUNT(DISTINCT a.id_dentista) AS cantidad_dentistas FROM Asistente a GROUP BY a.id_asistente ORDER BY cantidad_dentistas DESC;")
-                print(F"|    Nombre   |       Apellido      |   Cantidad_dentistas  |")
-                for nombre, apellido, cantidad_dentistas in cur.fetchall():
-                    print("|%12s | %19s | %22d|" % (nombre, apellido, cantidad_dentistas))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==4:
-                cur.execute("SELECT t.nombre AS tratamiento, round(AVG(c.costo),2) AS costo_promedio FROM Tratamiento t JOIN Cita c ON t.id_tratamiento = c.id_tratamiento GROUP BY t.id_tratamiento ORDER BY costo_promedio DESC; ")
-                print(F"|           Tratamiento         |       Costo_promedio     |")
-                for tratamiento, costo_promedio in cur.fetchall():
-                    print("|%30s | %24.2f |" % (tratamiento, costo_promedio))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==5:
-                cur.execute("SELECT estado, COUNT(id_cita) AS cantidad_citas FROM Cita GROUP BY estado;")
-                print(F"|           Estado          |        Cantidad_citas    |")
-                for estado, cantidad_citas in cur.fetchall():
-                    print("|%26s | %24d |" % (estado, cantidad_citas))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==6:
-                cur.execute("SELECT p.nombre, p.apellido, COUNT(c.id_cita) AS cantidad_citas FROM Paciente p JOIN Cita c ON p.id_paciente = c.id_paciente GROUP BY p.id_paciente;")
-                print(F"|    Nombre   |       Apellido      |   Cantidad_dentistas  |")
-                for nombre, apellido, cantidad_citas in cur.fetchall():
-                    print("|%12s | %19s | %22d|" % (nombre, apellido, cantidad_citas))
-                print()
-                opcion2=int(input("\nIngrese una opcion: "))
-            elif opcion2==7:
-                opcion2=0
-                
-
-            
-        mostrarMenu()
-        opcion=int(input("\nIngrese una opcion: "))    
-    """
+    
     elif opcion==4:
+        print('-'*69+"TABLA DE CITAS"+'-'*69)
+        print(F"|  id_cita   |   id_paciente   |   id_historia   |   id_dentista   |   id_asistente   |   id_tratamiento   |   cita_fecha   |     estado     |    costo   |")
+        cur.execute("select id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo FROM cita")
+        for id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo in cur.fetchall():
+            print("|%8d | %12d | %12d | %11d | %12d | %15d | %15s | %14s | %7.2f |" % (id_cita, id_paciente, id_historia, id_dentista, id_asistente, id_tratamiento, cita_fecha, estado, costo))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_Citas()
+
+    elif opcion==5:
+        print('-'*69+"TABLA DE TRATAMIENTO"+'-'*69)
+        print(F"|  id_tratamiento  |     nombre     |     descripcion    |    duracion_dias   |")
+        cur.execute("select id_tratamiento, nombre, descripcion, duracion_dias FROM tratamiento")
+        for id_tratamiento, nombre, descripcion, duracion_dias in cur.fetchall():
+            print("|%16d | %12s  | %15s  | %14d |" %  (id_tratamiento, nombre, descripcion, duracion_dias))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_Tratamientos()
+
+    elif opcion==6:
+        print('-'*69 + "TABLA DE HISTORIAS CLÍNICAS" + '-'*69)
+        print(F"| id_historia | id_paciente |   observaciones   |")
+        cur.execute("SELECT id_historia, id_paciente, observaciones FROM historia_clinica")
+        for id_historia, id_paciente, observaciones in cur.fetchall():
+            print("|%13d | %12d | %17s |" % (id_historia, id_paciente, observaciones))
+        opcion=int(input("\nIngrese una opcion: "))
+        print()
+        mostrarOpciones_HC()
+
+    elif opcion==7:
         opcion=0
         miConexion.close()
 print("Saliendo....")
