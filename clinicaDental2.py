@@ -25,7 +25,7 @@ def mostrarOpciones_Dentistas():
     print("1. Añadir Dentista")
     print("2. Consultar la información de un Dentista")
     print("3. Editar la información de un Dentista")
-    print(". Eliminar registro de un Dentista")
+    print("4. Eliminar registro de un Dentista")
     print("5. Regresar al menú principal")
 
 def mostrarOpciones_Asistentes():
