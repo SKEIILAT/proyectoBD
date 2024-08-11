@@ -246,8 +246,11 @@ while(1<=opcion<=7):
                 mostrarOpciones_Asistentes()
                 opcionA = int(input("\nIngrese una opcion: "))
 
+            elif opcionA==5:
+                opcionA=0
+
             mostrarMenu()
-            opcion = int(input("\nIngrese una opcion: "))
+            opcion=int(input("\nIngrese una opcion: "))
 
     
     elif opcion==4:
@@ -306,6 +309,9 @@ while(1<=opcion<=7):
                 mostrarTablaCitas()
                 mostrarOpciones_Citas()
                 opcionA = int(input("\nIngrese una opcion: "))
+
+            elif opcionA==5:
+                opcionA=0
 
             mostrarMenu()
             opcion = int(input("\nIngrese una opcion: "))
