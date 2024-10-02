@@ -5,6 +5,7 @@ from datetime import datetime
 import pymysql
 from datetime import time
 # Conexión a la base de datos
+# cambio
 def conectar_bd():
     return pymysql.connect(
         host='localhost',
