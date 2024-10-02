@@ -15,6 +15,7 @@ def conectar_bd():
     )
 def mostrar_datos(tabla):
     # Crear una ventana nueva para mostrar los datos de la tabla
+    #HOLA MUNDO
     top = tk.Toplevel(root)
     top.title(tabla)
 
